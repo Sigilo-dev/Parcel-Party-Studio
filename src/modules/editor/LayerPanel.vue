@@ -26,5 +26,6 @@ const icons = { rectangle: Square, ellipse: Circle, text: Type, image: Image }
   </section>
 </template>
 <style module>
+.heading, .actions { flex-shrink: 0; }.list { min-height: 0; }
 .panel { display: flex; flex-direction: column; min-height: 140px; flex: 1; border-top: 1px solid #363d46; }.heading { display: flex; align-items: center; padding: 18px 16px 14px; color: #86929f; gap: 14px; }.heading > div { flex: 1; }.list { overflow-y: auto; flex: 1; padding: 0 7px 8px; }.layer { display: flex; align-items: center; gap: 0; border-radius: 4px; margin-bottom: 2px; border: 1px solid transparent; }.layer button { padding: 7px 5px; color: #7d8997; }.select { min-width: 0; flex: 1; gap: 9px; height: 36px; text-align: left; }.select span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; color: #c0c8d3; }.select svg { flex-shrink: 0; }.selected { background: #38342e; border-color: #675039; }.selected .select svg { color: #d7ad78; }.hidden { opacity: 0.45; }.actions { display: flex; padding: 6px 12px; border-top: 1px solid #313943; }.actions span { flex: 1; }.empty { text-align: center; font-size: 11px; color: #7e8b99; line-height: 1.8; padding: 30px 0; }
 </style>

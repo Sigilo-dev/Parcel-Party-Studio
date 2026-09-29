@@ -5,6 +5,7 @@ import type { GraphicElement } from './model'
 import { shapeConfig } from './rendering'
 import { useAssets } from '../assets/store'
 import { useEditor } from './store'
+import { applyTransform } from './transforms'
 const props = defineProps<{ element: GraphicElement }>()
 const editor = useEditor(), assets = useAssets()
 const config = computed(() => shapeConfig(props.element, props.element.assetId ? assets.images[props.element.assetId] : undefined))
@@ -15,10 +16,9 @@ function move(event: Konva.KonvaEventObject<DragEvent>) {
 }
 function transform(event: Konva.KonvaEventObject<Event>) {
   const node = event.target
-  const width = Math.max(4, Math.min(16384, props.element.width * node.scaleX()))
-  const height = Math.max(4, Math.min(16384, props.element.height * node.scaleY()))
+  const patch = applyTransform(props.element, { x: node.x(), y: node.y(), rotation: node.rotation(), scaleX: node.scaleX(), scaleY: node.scaleY() })
   node.scale({ x: 1, y: 1 })
-  editor.update(props.element.id, { x: Math.round(node.x()), y: Math.round(node.y()), width: Math.round(width), height: Math.round(height), rotation: Math.round(node.rotation()) })
+  editor.update(props.element.id, patch)
 }
 </script>
 
