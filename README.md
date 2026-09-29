@@ -10,7 +10,10 @@ Hecha en base a Tauri 2 y Vue 3, con un núcleo nativo en Rust y TypeScript para
 
 - Cuatro siluetas: rectangular, cuadrada, circular y bold, con recorte y área segura.
 - Formas, etiquetas e imágenes en capas: mueve, gira, escala y experimenta con deshacer y rehacer.
-- Fibras de papel generadas para añadir textura al cartón.
+- Cinco materiales de cartón y siete familias de imperfecciones, con placeholders locales reemplazables.
+- Biblioteca de imágenes con categorías, previsualización y reemplazo compartido entre diseños.
+- Composición procedural con semillas reproducibles, zonas protegidas y lotes de variantes para elegir.
+- Reflejos, escalado independiente y cinta adhesiva que puede sobresalir del contorno.
 - Proyectos locales con sus propios recursos y exportación PNG para llevar tus creaciones a Godot.
 
 Sin cuentas ni recursos gráficos remotos. Solo tu taller, tus archivos y tu próxima pequeña aventura.
