@@ -42,6 +42,7 @@ pub async fn import_asset(state: State<'_, Workspace>) -> Result<Option<Value>, 
     }
     let id = uuid::Uuid::new_v4().to_string();
     let relative = format!("assets/{id}.{ext}");
+    fs::create_dir_all(root.join("assets")).map_err(error)?;
     let assets = root.join("assets").canonicalize().map_err(error)?;
     if !assets.starts_with(root.canonicalize().map_err(error)?) {
         return Err("Assets directory escapes project".into());

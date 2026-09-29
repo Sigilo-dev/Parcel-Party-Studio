@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { Sparkles, Shuffle, Copy, X, Layers } from '@lucide/vue'
 import { useEditor } from '../editor/store'
-import { uid } from '../editor/model'
+import { clone, uid } from '../editor/model'
 import type { GenerationRule, TemplateKind } from '../editor/model'
 import { useGeneration } from './useGeneration'
 import { defaultRule } from './profiles'
@@ -30,6 +30,7 @@ onMounted(() => { if (editor.proceduralOpen) dialog.value?.showModal() })
         <label class="field-label">Profile name<input :value="profile.name" maxlength="120" @change="generation.editProfile({ name: ($event.target as HTMLInputElement).value.trim() || 'Untitled profile' })" /></label>
         <div class="two-columns"><label class="field-label">Template<select :value="profile.template.kind" @change="generation.editProfile({ template: createTemplate(($event.target as HTMLSelectElement).value as TemplateKind) })"><option v-for="t in templates" :key="t.kind" :value="t.kind">{{ t.label }}</option></select></label><label class="field-label">Material<select :value="profile.materialId ?? ''" @change="generation.editProfile({ materialId: ($event.target as HTMLSelectElement).value || null })"><option value="">Solid cardboard</option><option v-for="m in editor.project.materials" :key="m.id" :value="m.id">{{ m.name }}</option></select></label></div>
         <NumberField label="Template width" :value="profile.template.width" :min="64" :max="4096" suffix="px" @change="generation.editProfile({ template: resizeTemplate(profile.template, 'width', $event) })" />
+        <button class="secondary" @click="generation.editProfile({ template: clone(editor.project.template), materialId: editor.project.materialId })">Use current canvas setup</button>
         <label class="check-label"><input type="checkbox" :checked="profile.protectContent" @change="generation.editProfile({ protectContent: !profile.protectContent })" />Protect text & marked illustrations</label>
         <RegionEditor :regions="editor.project.protectedZones" label="PROTECTED REGIONS" @change="editor.change(p => p.protectedZones = $event)" />
         <label class="field-label">Imperfection rules<select :value="rule?.id" @change="ruleId = ($event.target as HTMLSelectElement).value"><option v-for="r in profile.rules" :key="r.id" :value="r.id">{{ r.enabled ? '●' : '○' }} {{ editor.project.assets.find(a => a.id === r.assetId)?.name }}</option></select></label><button class="secondary" @click="addRule">+ Add rule</button>

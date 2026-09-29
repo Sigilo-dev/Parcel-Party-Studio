@@ -54,7 +54,7 @@ function edit(key: 'name' | 'category', event: Event) {
         <label class="field-label">Category<select :value="selected.category" @change="edit('category', $event)"><option v-for="c in categories" :key="c.id" :value="c.id">{{ c.label }}</option></select></label>
         <p class="muted">{{ assetUsages(editor.project, selected.id) }} references across designs, materials and profiles. Replacement updates them all.</p>
         <div :class="$style.actions"><button class="primary" :disabled="assets.missing.includes(selected.id)" @click="place(selected)"><Plus :size="14" />{{ selected.category === 'materials' ? 'Apply material' : 'Place on canvas' }}</button><button class="secondary" @click="emit('action', `replace:${selected.id}`)">Replace image…</button><button @click="confirmRemove = !confirmRemove">Remove…</button></div>
-        <div v-if="confirmRemove" class="warning"><p>Remove this asset and all its layer, material and profile references? Undo restores them.</p><button class="danger" @click="remove">Remove asset and references</button></div>
+        <div v-if="confirmRemove" class="warning"><p>Remove this asset and all its layer, material and profile references? Undo restores them. The original file stays in the project folder for recovery.</p><button class="danger" @click="remove">Remove asset and references</button></div>
       </template>
     </dialog>
   </section>
