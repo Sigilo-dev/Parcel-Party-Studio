@@ -1,1 +1,25 @@
-﻿:root { font-family: Segoe UI, sans-serif; color: #e7e9ec; background: #171b20; } body { margin: 0; }
+:root { font-family: 'Segoe UI', sans-serif; color: #e7e9ec; background: #171b20; color-scheme: dark; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+body { margin: 0; overflow: hidden; }
+button, input, textarea { font: inherit; }
+button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 7px 10px; border: 1px solid transparent; background: transparent; color: #a9b4c3; font-size: 11px; border-radius: 4px; cursor: pointer; transition: background .12s, color .12s; user-select: none; }
+button:hover:not(:disabled) { background: #343d49; color: #f1f3f5; }
+button:disabled { opacity: .35; cursor: default; }
+button.active { background: #3b352d; color: #e6b77a; }
+button.primary { background: #d7aa72; color: #29241e; font-weight: 600; border-color: #e5ba84; }
+button.primary:hover:not(:disabled) { background: #ecc38e; color: #221f1b; }
+button.secondary { background: #303944; border-color: #465363; color: #c7d1de; }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid #d7aa72; outline-offset: 2px; }
+input:not([type=checkbox]), textarea { background: #191f26; border: 1px solid #3b4552; color: #cbd4e0; border-radius: 4px; padding: 8px 9px; font-size: 11px; min-width: 0; }
+input[type=number] { appearance: textfield; font-variant-numeric: tabular-nums; }
+input::-webkit-inner-spin-button, input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+input:disabled, fieldset:disabled { opacity: .5; }
+input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+input[type=color]::-webkit-color-swatch { border: 0; border-radius: 2px; }
+textarea { resize: vertical; line-height: 1.5; }
+fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+.section-title { display: flex; align-items: center; justify-content: space-between; font-size: 9px; font-weight: 600; letter-spacing: 1.25px; color: #abb6c5; }
+.section-title > span { color: #69788b; font-size: 9px; font-weight: 400; letter-spacing: 0; }
+.field-label { display: block; margin: 17px 0 14px; font-size: 10px; color: #8d99a7; }
+.field-label > input, .field-label > textarea { display: block; width: 100%; margin-top: 7px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }::-webkit-scrollbar-track { background: transparent; }::-webkit-scrollbar-thumb { background: #46505d; border-radius: 8px; }
