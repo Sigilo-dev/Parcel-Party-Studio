@@ -4,8 +4,12 @@ import Konva from 'konva'
 import { Minus, Plus, Scan, Hand, MousePointer2, ShieldCheck } from '@lucide/vue'
 import { useEditor } from './store'
 import GraphicNode from './GraphicNode.vue'
-import { clipTemplate, templateShape } from './rendering'
+import { clipTemplate, templateShape, materialConfig } from './rendering'
+import { useAssets } from '../assets/store'
+import { regionBounds } from '../procedural/geometry'
 const editor = useEditor()
+const assets = useAssets()
+const material = computed(() => materialConfig(editor.project, editor.project, assets.images))
 const host = ref<HTMLDivElement>()
 const stageRef = ref<{ getNode(): Konva.Stage }>()
 const transformerRef = ref<{ getNode(): Konva.Transformer }>()
@@ -62,10 +66,14 @@ onBeforeUnmount(() => observer?.disconnect())
         <v-layer>
           <v-group :config="origin">
             <v-group :config="{ clipFunc: (ctx: Konva.Context) => clipTemplate(ctx, t) }">
-              <v-rect :config="{ name: 'paper', width: t.width, height: t.height, fill: t.fill }" />
-              <GraphicNode v-for="element in editor.project.elements" :key="element.id" :element="element" />
+              <v-rect :config="{ name: 'paper', width: t.width, height: t.height, fill: material.color }" />
+              <v-rect v-if="material.image" :config="{ width: t.width, height: t.height, fillPatternImage: material.image, opacity: material.opacity, listening: false }" />
             </v-group>
             <component :is="t.kind === 'circle' ? 'v-ellipse' : 'v-rect'" :config="outline" />
+            <v-group v-for="element in editor.project.elements" :key="element.id" :config="element.allowOverflow ? {} : { clipFunc: (ctx: Konva.Context) => clipTemplate(ctx, t) }">
+              <GraphicNode :element="element" />
+            </v-group>
+            <v-group v-if="editor.showProtected" :config="{ listening: false }"><v-rect v-for="zone in editor.project.protectedZones" :key="zone.id" :config="{ ...regionBounds(zone, t), stroke: '#8ac5aa', strokeWidth: 1 / editor.zoom, dash: [6, 4], fill: '#8ac5aa22' }" /></v-group>
             <component :is="t.kind === 'circle' ? 'v-ellipse' : 'v-rect'" v-if="editor.showSafe" :config="safe" />
             <v-transformer ref="transformerRef" :config="{ flipEnabled: false, rotateEnabled: true, borderStroke: '#e5b572', anchorStroke: '#e5b572', anchorFill: '#20252b', anchorSize: 8, padding: 2, boundBoxFunc: (oldBox: Konva.Box, newBox: Konva.Box) => Math.abs(newBox.width) < 4 || Math.abs(newBox.height) < 4 ? oldBox : newBox }" />
           </v-group>

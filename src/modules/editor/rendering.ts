@@ -1,5 +1,14 @@
 import Konva from 'konva'
-import type { GraphicElement, Template } from './model'
+import type { Composition, GraphicElement, Project, Template } from './model'
+
+export function innerTransform(e: GraphicElement) {
+  const sx = e.scaleX ?? 1, sy = e.scaleY ?? 1
+  return { x: e.flipX ? e.width * sx : 0, y: e.flipY ? e.height * sy : 0, scaleX: sx * (e.flipX ? -1 : 1), scaleY: sy * (e.flipY ? -1 : 1) }
+}
+export function materialConfig(project: Pick<Project, 'materials'>, composition: Composition, images: Record<string, HTMLImageElement>) {
+  const material = project.materials.find(m => m.id === composition.materialId)
+  return { color: material?.color ?? composition.template.fill, image: material ? images[material.assetId] : undefined, opacity: material?.opacity ?? 1 }
+}
 
 export function clipTemplate(ctx: Konva.Context, template: Template) {
   ctx.beginPath()
@@ -21,10 +30,12 @@ export function shapeConfig(element: GraphicElement, image?: HTMLImageElement) {
 export function makeNode(element: GraphicElement, image?: HTMLImageElement): Konva.Group {
   const group = new Konva.Group({ x: element.x, y: element.y, width: element.width, height: element.height, rotation: element.rotation, opacity: element.opacity, visible: element.visible })
   const config = shapeConfig(element, image)
-  if (element.kind === 'rectangle') group.add(new Konva.Rect(config))
-  if (element.kind === 'ellipse') group.add(new Konva.Ellipse(config as Konva.EllipseConfig))
-  if (element.kind === 'text') group.add(new Konva.Text(config))
-  if (element.kind === 'image') group.add(new Konva.Image(config as Konva.ImageConfig))
+  const inner = new Konva.Group(innerTransform(element))
+  if (element.kind === 'rectangle') inner.add(new Konva.Rect(config))
+  if (element.kind === 'ellipse') inner.add(new Konva.Ellipse(config as Konva.EllipseConfig))
+  if (element.kind === 'text') inner.add(new Konva.Text(config))
+  if (element.kind === 'image') inner.add(new Konva.Image(config as Konva.ImageConfig))
+  group.add(inner)
   return group
 }
 

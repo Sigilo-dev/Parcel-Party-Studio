@@ -4,6 +4,9 @@ import { SlidersHorizontal, LockKeyhole, Link2, Package, ShieldCheck } from '@lu
 import { useEditor } from '../editor/store'
 import { resizeTemplate } from '../templates/catalog'
 import type { GraphicElement } from '../editor/model'
+import MaterialControls from '../assets/MaterialControls.vue'
+import ElementOptions from '../editor/ElementOptions.vue'
+import RegionEditor from '../procedural/RegionEditor.vue'
 import NumberField from './NumberField.vue'
 const editor = useEditor()
 const selected = computed(() => editor.selected)
@@ -36,8 +39,10 @@ function resize(axis: 'width' | 'height', value: number) { editor.change(p => { 
             <NumberField label="Font size" :value="selected.fontSize ?? 28" :min="1" :max="1024" suffix="px" @change="update('fontSize', $event)" />
           </template>
         </fieldset>
+        <ElementOptions />
       </section>
       <section v-else :class="$style.empty"><div><Package :size="25" :stroke-width="1.3" /></div><strong>Made of possibility.</strong><p>Select a layer to make it yours,<br>or set up your canvas below.</p></section>
+      <MaterialControls />
       <section :class="$style.section">
         <div class="section-title">CANVAS SETTINGS<Package :size="13" /></div>
         <label class="field-label">Project name<input :value="editor.project.name" maxlength="120" @change="editor.change(p => p.name = text($event).trim() || 'Untitled parcel')" /></label>
@@ -54,6 +59,7 @@ function resize(axis: 'width' | 'height', value: number) { editor.change(p => { 
         </div>
         <label :class="$style.check"><input v-model="editor.showSafe" type="checkbox" /><ShieldCheck :size="13" />Show safe area</label>
       </section>
+      <section :class="$style.section"><label class="check-label"><input v-model="editor.showProtected" type="checkbox" />Show protected regions</label><RegionEditor :regions="editor.project.protectedZones" label="PROTECTED REGIONS" @change="editor.change(p => p.protectedZones = $event)" /></section>
       <div :class="$style.tip"><span>FROM CARDBOARD TO GAME WORLD</span><p>Export a clean PNG at canvas size.<br>Ready to drop into your Godot project.</p><div>PNG <span>·</span> TRANSPARENT BACKGROUND</div></div>
     </div>
   </aside>

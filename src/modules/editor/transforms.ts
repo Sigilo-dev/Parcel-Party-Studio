@@ -7,9 +7,8 @@ export function applyTransform(element: GraphicElement, transform: Transform): P
   return {
     x: clamp(transform.x, -32768, 32768),
     y: clamp(transform.y, -32768, 32768),
-    width: clamp(element.width * transform.scaleX, 4, 16384),
-    height: clamp(element.height * transform.scaleY, 4, 16384),
+    scaleX: Math.max(0.01, Math.min(100, (element.scaleX ?? 1) * transform.scaleX)),
+    scaleY: Math.max(0.01, Math.min(100, (element.scaleY ?? 1) * transform.scaleY)),
     rotation: Math.round(transform.rotation % 360),
-    ...(element.kind === 'text' ? { fontSize: clamp((element.fontSize ?? 28) * transform.scaleY, 1, 1024) } : {}),
   }
 }

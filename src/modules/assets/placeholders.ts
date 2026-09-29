@@ -1,13 +1,16 @@
 import type { GraphicElement, Project } from '../editor/model'
 import { uid } from '../editor/model'
 import { createTemplate } from '../templates/catalog'
+import { builtinAssets, defaultMaterials } from './catalog'
+import { defaultProfile } from '../procedural/profiles'
 
 export function createElement(kind: GraphicElement['kind'], x = 80, y = 100): GraphicElement {
   return { id: uid(), kind, name: kind === 'text' ? 'Text label' : kind === 'ellipse' ? 'Paper circle' : 'Cardboard piece', x, y, width: kind === 'text' ? 260 : 150, height: kind === 'text' ? 80 : 120, rotation: 0, opacity: 1, visible: true, locked: false, fill: kind === 'text' ? '#493522' : '#e8c795', ...(kind === 'text' ? { text: 'HANDLE WITH CARE', fontSize: 28 } : {}) }
 }
 
 export function createProject(): Project {
-  return { version: 1, id: uid(), name: 'Untitled parcel', template: createTemplate(), assets: [], elements: [] }
+  const template = createTemplate()
+  return { version: 2, id: uid(), name: 'Untitled parcel', template, assets: builtinAssets(), elements: [], materialId: null, materials: defaultMaterials(), profiles: [defaultProfile(template)], activeProfileId: 'profile-default', protectedZones: [], seed: 1, variants: [] }
 }
 
 export function createDemo(): Project {

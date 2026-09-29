@@ -12,7 +12,8 @@ describe('document editing', () => {
   it('scales lettering along with its frame and constrains document transforms', () => {
     const text = createElement('text')
     const scaled = applyTransform(text, { x: 50000, y: -50000, scaleX: 2, scaleY: 2, rotation: 400 })
-    expect(scaled).toMatchObject({ width: 520, height: 160, fontSize: 56, x: 32768, y: -32768, rotation: 40 })
+    expect(scaled).toMatchObject({ scaleX: 2, scaleY: 2, x: 32768, y: -32768, rotation: 40 })
+    expect(scaled.fontSize).toBeUndefined()
   })
   it('undoes and redoes creation, transforms and deletion without changing ids', () => {
     const editor = useEditor(); editor.load(createProject()); editor.add('rectangle')

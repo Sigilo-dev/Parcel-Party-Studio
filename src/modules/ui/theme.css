@@ -1,7 +1,17 @@
 :root { font-family: 'Segoe UI', sans-serif; color: #e7e9ec; background: #171b20; color-scheme: dark; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
 * { box-sizing: border-box; }
 body { margin: 0; overflow: hidden; }
-button, input, textarea { font: inherit; }
+button, input, textarea, select { font: inherit; }
+select { background: #191f26; border: 1px solid #3b4552; color: #cbd4e0; border-radius: 4px; padding: 8px; font-size: 11px; min-width: 0; width: 100%; }
+dialog { background: #252d37; color: #d6dce4; border: 1px solid #4d5866; padding: 22px; border-radius: 9px; box-shadow: 0 25px 100px #0008; max-height: 90vh; }
+dialog::backdrop { background: #0d111acc; }
+.two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: end; }
+.muted { color: #91a0b3; font-size: 10px; line-height: 1.7; }
+.warning { color: #e3af94; font-size: 11px; line-height: 1.6; }
+.check-label { display: flex; align-items: center; gap: 7px; font-size: 10px; color: #aab9ca; margin: 12px 0; }
+.check-label input { accent-color: #dbad76; }
+.inspector-section { padding: 20px 17px; border-bottom: 1px solid #343b45; }
+button.danger { background: #653e3c; color: #ffd0c3; }
 button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 7px 10px; border: 1px solid transparent; background: transparent; color: #a9b4c3; font-size: 11px; border-radius: 4px; cursor: pointer; transition: background .12s, color .12s; user-select: none; }
 button:hover:not(:disabled) { background: #343d49; color: #f1f3f5; }
 button:disabled { opacity: .35; cursor: default; }

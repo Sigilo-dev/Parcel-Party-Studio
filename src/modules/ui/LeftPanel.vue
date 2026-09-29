@@ -4,17 +4,10 @@ import { MousePointer2, Hand, Square, Circle, Type, ImagePlus, Sparkles, Shapes,
 import TemplatePicker from '../templates/TemplatePicker.vue'
 import LayerPanel from '../editor/LayerPanel.vue'
 import { useEditor } from '../editor/store'
-import { useAssets } from '../assets/store'
-import { createElement } from '../assets/placeholders'
-const editor = useEditor(), assets = useAssets()
+import AssetLibrary from '../assets/AssetLibrary.vue'
+const editor = useEditor()
 const tab = ref<'templates' | 'assets'>('templates')
 defineEmits<{ action: [name: string] }>()
-function addAsset(id: string) {
-  const asset = editor.project.assets.find(a => a.id === id), image = assets.images[id]
-  if (!asset || !image) return
-  const el = { ...createElement('image'), name: asset.name, assetId: id, width: 180, height: Math.max(1, Math.round(180 * image.height / image.width)) }
-  editor.change(p => p.elements.push(el)); editor.selectedId = el.id
-}
 </script>
 <template>
   <aside :class="$style.panel">
@@ -29,13 +22,8 @@ function addAsset(id: string) {
     <div :class="$style.tabs"><button :class="{ active: tab === 'templates' }" @click="tab = 'templates'"><Shapes :size="13" />Templates</button><button :class="{ active: tab === 'assets' }" @click="tab = 'assets'"><Folder :size="13" />Assets</button></div>
     <div :class="$style.library">
     <TemplatePicker v-if="tab === 'templates'" />
-    <section v-else :class="$style.assets">
-      <div class="section-title">PROJECT ASSETS<span>{{ editor.project.assets.length }}</span></div>
-      <p>Local images, ready to place.</p>
-      <button class="secondary" @click="$emit('action', 'import')"><ImagePlus :size="14" />Import image</button>
-      <div :class="$style.assetList"><button v-for="asset in editor.project.assets" :key="asset.id" :title="asset.name" @click="addAsset(asset.id)"><img :src="assets.images[asset.id]?.src" alt="" /><span>{{ asset.name }}</span></button></div>
-    </section>
-    <button :class="$style.generate" @click="$emit('action', 'fibers')"><Sparkles :size="16" /><span><strong>A little texture goes a long way</strong><small>Generate paper fibers</small></span><span>+</span></button>
+    <AssetLibrary v-else @action="$emit('action', $event)" />
+    <button :class="$style.generate" @click="$emit('action', 'procedural')"><Sparkles :size="16" /><span><strong>A little texture goes a long way</strong><small>Open procedural studio</small></span><span>+</span></button>
     </div>
     <LayerPanel />
   </aside>

@@ -4,6 +4,7 @@ import { clone, uid } from './model'
 import type { GraphicElement, Project, TemplateKind } from './model'
 import { createDemo, createElement } from '../assets/placeholders'
 import { createTemplate } from '../templates/catalog'
+import { migrateProject } from '../persistence/migrate'
 
 export const useEditor = defineStore('editor', () => {
   const project = ref<Project>(createDemo())
@@ -14,6 +15,8 @@ export const useEditor = defineStore('editor', () => {
   const zoom = ref(0.8)
   const tool = ref<'select' | 'hand'>('select')
   const showSafe = ref(true)
+  const showProtected = ref(true)
+  const proceduralOpen = ref(false)
   const selected = computed(() => project.value.elements.find(e => e.id === selectedId.value))
   const dirty = computed(() => JSON.stringify(project.value) !== saved.value)
 
@@ -26,9 +29,9 @@ export const useEditor = defineStore('editor', () => {
     future.value = []
   }
   function load(value: Project, isSaved = true) {
-    project.value = clone(value)
+    project.value = migrateProject(value)
     past.value = []; future.value = []; selectedId.value = null
-    saved.value = isSaved ? JSON.stringify(value) : ''
+    saved.value = isSaved && (value.version as number) === 2 ? JSON.stringify(project.value) : ''
   }
   function markSaved(snapshot: Project) { saved.value = JSON.stringify(snapshot) }
   function undo() {
@@ -72,5 +75,5 @@ export const useEditor = defineStore('editor', () => {
     })
   }
   function setTemplate(kind: TemplateKind) { change(p => { p.template = createTemplate(kind) }) }
-  return { project, selectedId, selected, past, future, dirty, zoom, tool, showSafe, change, load, markSaved, undo, redo, add, update, toggle, remove, duplicate, reorder, setTemplate }
+  return { project, selectedId, selected, past, future, dirty, zoom, tool, showSafe, showProtected, proceduralOpen, change, load, markSaved, undo, redo, add, update, toggle, remove, duplicate, reorder, setTemplate }
 })
