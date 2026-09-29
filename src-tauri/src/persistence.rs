@@ -18,6 +18,7 @@ pub struct LoadedProject {
     project: Value,
     directory: String,
     asset_data: std::collections::HashMap<String, String>,
+    missing_assets: Vec<String>,
 }
 
 pub(crate) fn error(e: impl std::fmt::Display) -> String {
@@ -42,12 +43,18 @@ pub fn save_to(root: &Path, project: &Value) -> Result<(), String> {
         }
     }
     for asset in project["assets"].as_array().unwrap() {
+        if asset["source"] == "builtin" {
+            continue;
+        }
         asset_path(root, asset["path"].as_str().unwrap())?;
     }
     fs::create_dir_all(root.join("assets")).map_err(error)?;
     let dest = root.join("project.json");
     let temp = root.join(format!(".project-{}.tmp", uuid::Uuid::new_v4()));
     let bytes = serde_json::to_vec_pretty(project).map_err(error)?;
+    if bytes.len() > 16 * 1024 * 1024 {
+        return Err("Project exceeds 16 MB. Remove some saved variants.".into());
+    }
     let result = (|| {
         use std::io::Write;
         let mut file = fs::OpenOptions::new()
@@ -75,10 +82,22 @@ fn load_from(root: &Path) -> Result<LoadedProject, String> {
         return Err("Project file exceeds 16 MB".into());
     }
     let project: Value = serde_json::from_slice(&fs::read(file).map_err(error)?).map_err(error)?;
+    load_assets(root, project)
+}
+
+fn load_assets(root: &Path, project: Value) -> Result<LoadedProject, String> {
     validate(&project)?;
     let mut asset_data = std::collections::HashMap::new();
     let mut total = 0;
+    let mut missing_assets = Vec::new();
     for asset in project["assets"].as_array().unwrap() {
+        if asset["source"] == "builtin" {
+            continue;
+        }
+        if !root.join(asset["path"].as_str().unwrap()).exists() {
+            missing_assets.push(asset["id"].as_str().unwrap().to_owned());
+            continue;
+        }
         let path = asset_path(root, asset["path"].as_str().unwrap())?;
         let size = fs::metadata(&path).map_err(error)?.len();
         total += size;
@@ -99,6 +118,7 @@ fn load_from(root: &Path) -> Result<LoadedProject, String> {
         project,
         directory: root.to_string_lossy().into_owned(),
         asset_data,
+        missing_assets,
     })
 }
 
@@ -164,6 +184,14 @@ pub async fn save_project(project: Value, state: State<'_, Workspace>) -> Result
     save_to(&root(&state)?, &project)
 }
 
+#[tauri::command]
+pub async fn refresh_assets(
+    project: Value,
+    state: State<'_, Workspace>,
+) -> Result<LoadedProject, String> {
+    load_assets(&root(&state)?, project)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -204,7 +232,7 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let mut p = fixture();
         save_to(dir.path(), &p).unwrap();
-        p["version"] = json!(2);
+        p["version"] = json!(3);
         assert!(save_to(dir.path(), &p).is_err());
         p["version"] = json!(1);
         p["template"]["width"] = json!(-1);
@@ -248,5 +276,50 @@ mod tests {
         assert!(save_to(dir.path(), &p).is_err());
         fs::write(dir.path().join("project.json"), "{broken").unwrap();
         assert!(load_from(dir.path()).is_err());
+    }
+    fn procedural_fixture() -> Value {
+        serde_json::from_str(include_str!("../tests/fixtures/procedural.json")).unwrap()
+    }
+    #[test]
+    fn procedural_document_and_variants_survive_disk_roundtrip() {
+        let dir = tempfile::tempdir().unwrap();
+        let project = procedural_fixture();
+        save_to(dir.path(), &project).unwrap();
+        let reopened = load_from(dir.path()).unwrap();
+        assert_eq!(reopened.project, project);
+        assert!(reopened.asset_data.is_empty());
+        assert!(reopened.missing_assets.is_empty());
+        assert_eq!(reopened.project["seed"], 2026);
+        assert_eq!(reopened.project["variants"][0]["seed"], 2027);
+    }
+    #[test]
+    fn missing_images_are_reported_without_losing_design_data() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut project = procedural_fixture();
+        project["assets"].as_array_mut().unwrap().push(json!({"id":"missing", "name":"Missing", "path":"assets/missing.png", "mime":"image/png", "source":"file", "category":"illustrations"}));
+        fs::write(
+            dir.path().join("project.json"),
+            serde_json::to_vec(&project).unwrap(),
+        )
+        .unwrap();
+        let loaded = load_from(dir.path()).unwrap();
+        assert_eq!(loaded.missing_assets, vec!["missing"]);
+        assert_eq!(loaded.project, project);
+        assert!(save_to(dir.path(), &project).is_err());
+    }
+    #[test]
+    fn rejects_dangling_variant_references_and_invalid_profile_ranges() {
+        let mut project = procedural_fixture();
+        project["variants"][0]["elements"][0]["assetId"] = json!("nonexistent");
+        assert!(validate(&project).is_err());
+        project = procedural_fixture();
+        project["profiles"][0]["rules"][0]["scale"] = json!([3, 1]);
+        assert!(validate(&project).is_err());
+        project = procedural_fixture();
+        project["protectedZones"][0]["width"] = json!(2);
+        assert!(validate(&project).is_err());
+        project = procedural_fixture();
+        project["materials"][0]["assetId"] = json!("missing");
+        assert!(validate(&project).is_err());
     }
 }

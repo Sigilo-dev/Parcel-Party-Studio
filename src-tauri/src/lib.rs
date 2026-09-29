@@ -2,6 +2,7 @@ mod assets;
 mod export;
 mod persistence;
 mod schema;
+mod schema_v2;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -11,6 +12,7 @@ pub fn run() {
             persistence::create_project,
             persistence::open_project,
             persistence::save_project,
+            persistence::refresh_assets,
             assets::import_asset,
             export::export_png
         ])

@@ -31,6 +31,15 @@ pub async fn import_asset(state: State<'_, Workspace>) -> Result<Option<Value>, 
         return Err("Images must be smaller than 20 MB".into());
     }
     let bytes = fs::read(file.path()).map_err(error)?;
+    let valid = match mime {
+        "image/png" => bytes.starts_with(b"\x89PNG\r\n\x1a\n"),
+        "image/jpeg" => bytes.starts_with(&[0xff, 0xd8, 0xff]),
+        "image/webp" => bytes.starts_with(b"RIFF") && bytes.get(8..12) == Some(b"WEBP"),
+        _ => false,
+    };
+    if !valid {
+        return Err("Image content does not match its file extension".into());
+    }
     let id = uuid::Uuid::new_v4().to_string();
     let relative = format!("assets/{id}.{ext}");
     let assets = root.join("assets").canonicalize().map_err(error)?;

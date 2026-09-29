@@ -1,0 +1,1084 @@
+{
+  "version": 2,
+  "id": "fixture-project",
+  "name": "Procedural roundtrip",
+  "template": {
+    "kind": "rectangular",
+    "width": 440,
+    "height": 680,
+    "fill": "#c99b62",
+    "outline": "#805a38",
+    "outlineWidth": 3,
+    "safeInset": 24
+  },
+  "assets": [
+    {
+      "id": "asset-kraft-light",
+      "name": "Light kraft",
+      "builtin": "kraft-light",
+      "category": "materials",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-kraft-dark",
+      "name": "Dark kraft",
+      "builtin": "kraft-dark",
+      "category": "materials",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-recycled",
+      "name": "Recycled cardboard",
+      "builtin": "recycled",
+      "category": "materials",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-cardstock",
+      "name": "Cardstock",
+      "builtin": "cardstock",
+      "category": "materials",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-weathered",
+      "name": "Weathered cardboard",
+      "builtin": "weathered",
+      "category": "materials",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-creases",
+      "name": "Creases placeholder",
+      "builtin": "creases",
+      "category": "creases",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-grease",
+      "name": "Grease stains placeholder",
+      "builtin": "grease",
+      "category": "grease",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-dirt",
+      "name": "Dirt placeholder",
+      "builtin": "dirt",
+      "category": "dirt",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-folds",
+      "name": "Folds placeholder",
+      "builtin": "folds",
+      "category": "folds",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-dents",
+      "name": "Dents placeholder",
+      "builtin": "dents",
+      "category": "dents",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-wear",
+      "name": "Wear placeholder",
+      "builtin": "wear",
+      "category": "wear",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-tape",
+      "name": "Adhesive tape placeholder",
+      "builtin": "tape",
+      "category": "tape",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    },
+    {
+      "id": "asset-parcel",
+      "name": "Parcel illustration",
+      "builtin": "parcel",
+      "category": "illustrations",
+      "source": "builtin",
+      "path": "",
+      "mime": "image/svg+xml"
+    }
+  ],
+  "elements": [
+    {
+      "id": "gen-profile-default-rule-creases-0",
+      "name": "Creases placeholder 1",
+      "kind": "image",
+      "assetId": "asset-creases",
+      "x": 33.21098436974985,
+      "y": 84.63558074464926,
+      "width": 160,
+      "height": 160,
+      "scaleX": 0.43012868678197264,
+      "scaleY": 0.43012868678197264,
+      "rotation": -129.31218040175736,
+      "opacity": 0.4587791500613093,
+      "flipX": true,
+      "flipY": false,
+      "fill": "#c99b62",
+      "locked": false,
+      "visible": true,
+      "propertyLocks": [
+        "position",
+        "opacity"
+      ],
+      "allowOverflow": false,
+      "generated": {
+        "profileId": "profile-default",
+        "ruleId": "rule-creases",
+        "slot": 0
+      }
+    },
+    {
+      "id": "gen-profile-default-rule-creases-1",
+      "name": "Creases placeholder 2",
+      "kind": "image",
+      "assetId": "asset-creases",
+      "x": 251.37908275886653,
+      "y": 585.2733181237285,
+      "width": 160,
+      "height": 160,
+      "scaleX": 0.4289275746094063,
+      "scaleY": 0.4289275746094063,
+      "rotation": 28.195710070431232,
+      "opacity": 0.5269882830791175,
+      "flipX": false,
+      "flipY": true,
+      "fill": "#c99b62",
+      "locked": false,
+      "visible": true,
+      "propertyLocks": [],
+      "allowOverflow": false,
+      "generated": {
+        "profileId": "profile-default",
+        "ruleId": "rule-creases",
+        "slot": 1
+      }
+    },
+    {
+      "id": "gen-profile-default-rule-creases-2",
+      "name": "Creases placeholder 3",
+      "kind": "image",
+      "assetId": "asset-creases",
+      "x": 233.24548020732448,
+      "y": 537.8275390942587,
+      "width": 160,
+      "height": 160,
+      "scaleX": 0.5266250320244581,
+      "scaleY": 0.5266250320244581,
+      "rotation": -72.38556182943285,
+      "opacity": 0.25853370390832425,
+      "flipX": true,
+      "flipY": true,
+      "fill": "#c99b62",
+      "locked": false,
+      "visible": true,
+      "propertyLocks": [],
+      "allowOverflow": false,
+      "generated": {
+        "profileId": "profile-default",
+        "ruleId": "rule-creases",
+        "slot": 2
+      }
+    },
+    {
+      "id": "gen-profile-default-rule-dirt-0",
+      "name": "Dirt placeholder 1",
+      "kind": "image",
+      "assetId": "asset-dirt",
+      "x": 261.20276214913366,
+      "y": 117.287992326915,
+      "width": 160,
+      "height": 160,
+      "scaleX": 0.3259284038329497,
+      "scaleY": 0.3259284038329497,
+      "rotation": -112.0147005468607,
+      "opacity": 0.4672852299176157,
+      "flipX": true,
+      "flipY": true,
+      "fill": "#c99b62",
+      "locked": false,
+      "visible": true,
+      "propertyLocks": [],
+      "allowOverflow": false,
+      "generated": {
+        "profileId": "profile-default",
+        "ruleId": "rule-dirt",
+        "slot": 0
+      }
+    },
+    {
+      "id": "gen-profile-default-rule-dirt-1",
+      "name": "Dirt placeholder 2",
+      "kind": "image",
+      "assetId": "asset-dirt",
+      "x": 411.74021977867113,
+      "y": 165.4153598485987,
+      "width": 160,
+      "height": 160,
+      "scaleX": 0.5888430466409773,
+      "scaleY": 0.5888430466409773,
+      "rotation": -115.02427744679153,
+      "opacity": 0.33840816617012026,
+      "flipX": false,
+      "flipY": false,
+      "fill": "#c99b62",
+      "locked": false,
+      "visible": true,
+      "propertyLocks": [],
+      "allowOverflow": false,
+      "generated": {
+        "profileId": "profile-default",
+        "ruleId": "rule-dirt",
+        "slot": 1
+      }
+    },
+    {
+      "id": "gen-profile-default-rule-tape-0",
+      "name": "Adhesive tape placeholder 1",
+      "kind": "image",
+      "assetId": "asset-tape",
+      "x": 10.846588808383359,
+      "y": 151.50445554662613,
+      "width": 160,
+      "height": 160,
+      "scaleX": 0.6362496581394226,
+      "scaleY": 0.6362496581394226,
+      "rotation": -122.22107372246683,
+      "opacity": 0.46360731236636643,
+      "flipX": false,
+      "flipY": false,
+      "fill": "#c99b62",
+      "locked": false,
+      "visible": true,
+      "propertyLocks": [],
+      "allowOverflow": true,
+      "generated": {
+        "profileId": "profile-default",
+        "ruleId": "rule-tape",
+        "slot": 0
+      }
+    },
+    {
+      "id": "gen-profile-default-rule-tape-1",
+      "name": "Adhesive tape placeholder 2",
+      "kind": "image",
+      "assetId": "asset-tape",
+      "x": 321.41235444958994,
+      "y": 645.048800418064,
+      "width": 160,
+      "height": 160,
+      "scaleX": 0.6288829597877339,
+      "scaleY": 0.6288829597877339,
+      "rotation": -160.79424183815718,
+      "opacity": 0.46065423516556625,
+      "flipX": false,
+      "flipY": true,
+      "fill": "#c99b62",
+      "locked": false,
+      "visible": true,
+      "propertyLocks": [],
+      "allowOverflow": true,
+      "generated": {
+        "profileId": "profile-default",
+        "ruleId": "rule-tape",
+        "slot": 1
+      }
+    }
+  ],
+  "materialId": "kraft-light",
+  "materials": [
+    {
+      "id": "kraft-light",
+      "name": "Light kraft",
+      "color": "#cda676",
+      "assetId": "asset-kraft-light",
+      "opacity": 1
+    },
+    {
+      "id": "kraft-dark",
+      "name": "Dark kraft",
+      "color": "#8c6344",
+      "assetId": "asset-kraft-dark",
+      "opacity": 1
+    },
+    {
+      "id": "recycled",
+      "name": "Recycled cardboard",
+      "color": "#a79c80",
+      "assetId": "asset-recycled",
+      "opacity": 1
+    },
+    {
+      "id": "cardstock",
+      "name": "Cardstock",
+      "color": "#eee5d1",
+      "assetId": "asset-cardstock",
+      "opacity": 1
+    },
+    {
+      "id": "weathered",
+      "name": "Weathered cardboard",
+      "color": "#b5936d",
+      "assetId": "asset-weathered",
+      "opacity": 1
+    }
+  ],
+  "profiles": [
+    {
+      "id": "profile-default",
+      "name": "Everyday parcel",
+      "template": {
+        "kind": "rectangular",
+        "width": 440,
+        "height": 680,
+        "fill": "#c99b62",
+        "outline": "#805a38",
+        "outlineWidth": 3,
+        "safeInset": 24
+      },
+      "materialId": "kraft-light",
+      "protectContent": true,
+      "rules": [
+        {
+          "id": "rule-creases",
+          "assetId": "asset-creases",
+          "enabled": true,
+          "probability": 0.85,
+          "count": [
+            1,
+            3
+          ],
+          "x": [
+            0,
+            1
+          ],
+          "y": [
+            0,
+            1
+          ],
+          "scale": [
+            0.3,
+            0.8
+          ],
+          "rotation": [
+            -180,
+            180
+          ],
+          "opacity": [
+            0.25,
+            0.65
+          ],
+          "flipX": true,
+          "flipY": true,
+          "zone": "surface",
+          "band": 0.18,
+          "regions": []
+        },
+        {
+          "id": "rule-grease",
+          "assetId": "asset-grease",
+          "enabled": false,
+          "probability": 0.85,
+          "count": [
+            1,
+            3
+          ],
+          "x": [
+            0,
+            1
+          ],
+          "y": [
+            0,
+            1
+          ],
+          "scale": [
+            0.3,
+            0.8
+          ],
+          "rotation": [
+            -180,
+            180
+          ],
+          "opacity": [
+            0.25,
+            0.65
+          ],
+          "flipX": true,
+          "flipY": true,
+          "zone": "surface",
+          "band": 0.18,
+          "regions": []
+        },
+        {
+          "id": "rule-dirt",
+          "assetId": "asset-dirt",
+          "enabled": true,
+          "probability": 0.85,
+          "count": [
+            1,
+            3
+          ],
+          "x": [
+            0,
+            1
+          ],
+          "y": [
+            0,
+            1
+          ],
+          "scale": [
+            0.3,
+            0.8
+          ],
+          "rotation": [
+            -180,
+            180
+          ],
+          "opacity": [
+            0.25,
+            0.65
+          ],
+          "flipX": true,
+          "flipY": true,
+          "zone": "surface",
+          "band": 0.18,
+          "regions": []
+        },
+        {
+          "id": "rule-folds",
+          "assetId": "asset-folds",
+          "enabled": false,
+          "probability": 0.85,
+          "count": [
+            1,
+            3
+          ],
+          "x": [
+            0,
+            1
+          ],
+          "y": [
+            0,
+            1
+          ],
+          "scale": [
+            0.3,
+            0.8
+          ],
+          "rotation": [
+            -180,
+            180
+          ],
+          "opacity": [
+            0.25,
+            0.65
+          ],
+          "flipX": true,
+          "flipY": true,
+          "zone": "surface",
+          "band": 0.18,
+          "regions": []
+        },
+        {
+          "id": "rule-dents",
+          "assetId": "asset-dents",
+          "enabled": false,
+          "probability": 0.85,
+          "count": [
+            1,
+            3
+          ],
+          "x": [
+            0,
+            1
+          ],
+          "y": [
+            0,
+            1
+          ],
+          "scale": [
+            0.3,
+            0.8
+          ],
+          "rotation": [
+            -180,
+            180
+          ],
+          "opacity": [
+            0.25,
+            0.65
+          ],
+          "flipX": true,
+          "flipY": true,
+          "zone": "surface",
+          "band": 0.18,
+          "regions": []
+        },
+        {
+          "id": "rule-wear",
+          "assetId": "asset-wear",
+          "enabled": false,
+          "probability": 0.85,
+          "count": [
+            1,
+            3
+          ],
+          "x": [
+            0,
+            1
+          ],
+          "y": [
+            0,
+            1
+          ],
+          "scale": [
+            0.3,
+            0.8
+          ],
+          "rotation": [
+            -180,
+            180
+          ],
+          "opacity": [
+            0.25,
+            0.65
+          ],
+          "flipX": true,
+          "flipY": true,
+          "zone": "surface",
+          "band": 0.18,
+          "regions": []
+        },
+        {
+          "id": "rule-tape",
+          "assetId": "asset-tape",
+          "enabled": true,
+          "probability": 0.85,
+          "count": [
+            1,
+            3
+          ],
+          "x": [
+            0,
+            1
+          ],
+          "y": [
+            0,
+            1
+          ],
+          "scale": [
+            0.3,
+            0.8
+          ],
+          "rotation": [
+            -180,
+            180
+          ],
+          "opacity": [
+            0.25,
+            0.65
+          ],
+          "flipX": true,
+          "flipY": true,
+          "zone": "perimeter",
+          "band": 0.18,
+          "regions": []
+        }
+      ]
+    }
+  ],
+  "activeProfileId": "profile-default",
+  "protectedZones": [
+    {
+      "id": "protected",
+      "name": "Number zone",
+      "x": 0.3,
+      "y": 0.35,
+      "width": 0.4,
+      "height": 0.3
+    }
+  ],
+  "seed": 2026,
+  "variants": [
+    {
+      "template": {
+        "kind": "rectangular",
+        "width": 440,
+        "height": 680,
+        "fill": "#c99b62",
+        "outline": "#805a38",
+        "outlineWidth": 3,
+        "safeInset": 24
+      },
+      "materialId": "kraft-light",
+      "elements": [
+        {
+          "id": "gen-profile-default-rule-creases-0",
+          "name": "Creases placeholder 1",
+          "kind": "image",
+          "assetId": "asset-creases",
+          "x": 33.21098436974985,
+          "y": 84.63558074464926,
+          "width": 160,
+          "height": 160,
+          "scaleX": 0.33587839601095765,
+          "scaleY": 0.33587839601095765,
+          "rotation": -104.28902948275208,
+          "opacity": 0.4587791500613093,
+          "flipX": true,
+          "flipY": false,
+          "fill": "#c99b62",
+          "locked": false,
+          "visible": true,
+          "propertyLocks": [
+            "position",
+            "opacity"
+          ],
+          "allowOverflow": false,
+          "generated": {
+            "profileId": "profile-default",
+            "ruleId": "rule-creases",
+            "slot": 0
+          }
+        },
+        {
+          "id": "gen-profile-default-rule-creases-1",
+          "name": "Creases placeholder 2",
+          "kind": "image",
+          "assetId": "asset-creases",
+          "x": 340.32585861481255,
+          "y": 729.0780602390728,
+          "width": 160,
+          "height": 160,
+          "scaleX": 0.6802177398465574,
+          "scaleY": 0.6802177398465574,
+          "rotation": -142.9545043129474,
+          "opacity": 0.5596588460728527,
+          "flipX": false,
+          "flipY": true,
+          "fill": "#c99b62",
+          "locked": false,
+          "visible": true,
+          "propertyLocks": [],
+          "allowOverflow": false,
+          "generated": {
+            "profileId": "profile-default",
+            "ruleId": "rule-creases",
+            "slot": 1
+          }
+        },
+        {
+          "id": "gen-profile-default-rule-creases-2",
+          "name": "Creases placeholder 3",
+          "kind": "image",
+          "assetId": "asset-creases",
+          "x": -15.38703335296903,
+          "y": 190.84755573041693,
+          "width": 160,
+          "height": 160,
+          "scaleX": 0.7230333614395932,
+          "scaleY": 0.7230333614395932,
+          "rotation": -18.731357865035534,
+          "opacity": 0.6183713021688164,
+          "flipX": false,
+          "flipY": false,
+          "fill": "#c99b62",
+          "locked": false,
+          "visible": true,
+          "propertyLocks": [],
+          "allowOverflow": false,
+          "generated": {
+            "profileId": "profile-default",
+            "ruleId": "rule-creases",
+            "slot": 2
+          }
+        },
+        {
+          "id": "gen-profile-default-rule-dirt-0",
+          "name": "Dirt placeholder 1",
+          "kind": "image",
+          "assetId": "asset-dirt",
+          "x": 374.4898241970986,
+          "y": 99.44433343277335,
+          "width": 160,
+          "height": 160,
+          "scaleX": 0.3928179029142484,
+          "scaleY": 0.3928179029142484,
+          "rotation": 63.27527454122901,
+          "opacity": 0.407044677156955,
+          "flipX": false,
+          "flipY": true,
+          "fill": "#c99b62",
+          "locked": false,
+          "visible": true,
+          "propertyLocks": [],
+          "allowOverflow": false,
+          "generated": {
+            "profileId": "profile-default",
+            "ruleId": "rule-dirt",
+            "slot": 0
+          }
+        },
+        {
+          "id": "gen-profile-default-rule-tape-0",
+          "name": "Adhesive tape placeholder 1",
+          "kind": "image",
+          "assetId": "asset-tape",
+          "x": 122.79993123977545,
+          "y": 527.1730763569166,
+          "width": 160,
+          "height": 160,
+          "scaleX": 0.5019385892199353,
+          "scaleY": 0.5019385892199353,
+          "rotation": 142.74381536990404,
+          "opacity": 0.4658478441648185,
+          "flipX": true,
+          "flipY": true,
+          "fill": "#c99b62",
+          "locked": false,
+          "visible": true,
+          "propertyLocks": [],
+          "allowOverflow": true,
+          "generated": {
+            "profileId": "profile-default",
+            "ruleId": "rule-tape",
+            "slot": 0
+          }
+        },
+        {
+          "id": "gen-profile-default-rule-tape-1",
+          "name": "Adhesive tape placeholder 2",
+          "kind": "image",
+          "assetId": "asset-tape",
+          "x": 343.21555702799395,
+          "y": 2.8272676713946225,
+          "width": 160,
+          "height": 160,
+          "scaleX": 0.7701775629073382,
+          "scaleY": 0.7701775629073382,
+          "rotation": 126.67127287946641,
+          "opacity": 0.3449712933972478,
+          "flipX": false,
+          "flipY": false,
+          "fill": "#c99b62",
+          "locked": false,
+          "visible": true,
+          "propertyLocks": [],
+          "allowOverflow": true,
+          "generated": {
+            "profileId": "profile-default",
+            "ruleId": "rule-tape",
+            "slot": 1
+          }
+        }
+      ],
+      "protectedZones": [
+        {
+          "id": "protected",
+          "name": "Number zone",
+          "x": 0.3,
+          "y": 0.35,
+          "width": 0.4,
+          "height": 0.3
+        }
+      ],
+      "id": "fixture-variant",
+      "name": "Variant 2027",
+      "seed": 2027,
+      "profile": {
+        "id": "profile-default",
+        "name": "Everyday parcel",
+        "template": {
+          "kind": "rectangular",
+          "width": 440,
+          "height": 680,
+          "fill": "#c99b62",
+          "outline": "#805a38",
+          "outlineWidth": 3,
+          "safeInset": 24
+        },
+        "materialId": "kraft-light",
+        "protectContent": true,
+        "rules": [
+          {
+            "id": "rule-creases",
+            "assetId": "asset-creases",
+            "enabled": true,
+            "probability": 0.85,
+            "count": [
+              1,
+              3
+            ],
+            "x": [
+              0,
+              1
+            ],
+            "y": [
+              0,
+              1
+            ],
+            "scale": [
+              0.3,
+              0.8
+            ],
+            "rotation": [
+              -180,
+              180
+            ],
+            "opacity": [
+              0.25,
+              0.65
+            ],
+            "flipX": true,
+            "flipY": true,
+            "zone": "surface",
+            "band": 0.18,
+            "regions": []
+          },
+          {
+            "id": "rule-grease",
+            "assetId": "asset-grease",
+            "enabled": false,
+            "probability": 0.85,
+            "count": [
+              1,
+              3
+            ],
+            "x": [
+              0,
+              1
+            ],
+            "y": [
+              0,
+              1
+            ],
+            "scale": [
+              0.3,
+              0.8
+            ],
+            "rotation": [
+              -180,
+              180
+            ],
+            "opacity": [
+              0.25,
+              0.65
+            ],
+            "flipX": true,
+            "flipY": true,
+            "zone": "surface",
+            "band": 0.18,
+            "regions": []
+          },
+          {
+            "id": "rule-dirt",
+            "assetId": "asset-dirt",
+            "enabled": true,
+            "probability": 0.85,
+            "count": [
+              1,
+              3
+            ],
+            "x": [
+              0,
+              1
+            ],
+            "y": [
+              0,
+              1
+            ],
+            "scale": [
+              0.3,
+              0.8
+            ],
+            "rotation": [
+              -180,
+              180
+            ],
+            "opacity": [
+              0.25,
+              0.65
+            ],
+            "flipX": true,
+            "flipY": true,
+            "zone": "surface",
+            "band": 0.18,
+            "regions": []
+          },
+          {
+            "id": "rule-folds",
+            "assetId": "asset-folds",
+            "enabled": false,
+            "probability": 0.85,
+            "count": [
+              1,
+              3
+            ],
+            "x": [
+              0,
+              1
+            ],
+            "y": [
+              0,
+              1
+            ],
+            "scale": [
+              0.3,
+              0.8
+            ],
+            "rotation": [
+              -180,
+              180
+            ],
+            "opacity": [
+              0.25,
+              0.65
+            ],
+            "flipX": true,
+            "flipY": true,
+            "zone": "surface",
+            "band": 0.18,
+            "regions": []
+          },
+          {
+            "id": "rule-dents",
+            "assetId": "asset-dents",
+            "enabled": false,
+            "probability": 0.85,
+            "count": [
+              1,
+              3
+            ],
+            "x": [
+              0,
+              1
+            ],
+            "y": [
+              0,
+              1
+            ],
+            "scale": [
+              0.3,
+              0.8
+            ],
+            "rotation": [
+              -180,
+              180
+            ],
+            "opacity": [
+              0.25,
+              0.65
+            ],
+            "flipX": true,
+            "flipY": true,
+            "zone": "surface",
+            "band": 0.18,
+            "regions": []
+          },
+          {
+            "id": "rule-wear",
+            "assetId": "asset-wear",
+            "enabled": false,
+            "probability": 0.85,
+            "count": [
+              1,
+              3
+            ],
+            "x": [
+              0,
+              1
+            ],
+            "y": [
+              0,
+              1
+            ],
+            "scale": [
+              0.3,
+              0.8
+            ],
+            "rotation": [
+              -180,
+              180
+            ],
+            "opacity": [
+              0.25,
+              0.65
+            ],
+            "flipX": true,
+            "flipY": true,
+            "zone": "surface",
+            "band": 0.18,
+            "regions": []
+          },
+          {
+            "id": "rule-tape",
+            "assetId": "asset-tape",
+            "enabled": true,
+            "probability": 0.85,
+            "count": [
+              1,
+              3
+            ],
+            "x": [
+              0,
+              1
+            ],
+            "y": [
+              0,
+              1
+            ],
+            "scale": [
+              0.3,
+              0.8
+            ],
+            "rotation": [
+              -180,
+              180
+            ],
+            "opacity": [
+              0.25,
+              0.65
+            ],
+            "flipX": true,
+            "flipY": true,
+            "zone": "perimeter",
+            "band": 0.18,
+            "regions": []
+          }
+        ]
+      }
+    }
+  ]
+}

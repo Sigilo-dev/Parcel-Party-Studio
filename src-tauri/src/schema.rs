@@ -5,7 +5,7 @@ use std::{
 };
 
 pub fn validate(project: &Value) -> Result<(), String> {
-    if project["version"].as_u64() != Some(1) {
+    if !matches!(project["version"].as_u64(), Some(1 | 2)) {
         return Err("Unsupported project version".into());
     }
     for key in ["id", "name"] {
@@ -63,12 +63,35 @@ pub fn validate(project: &Value) -> Result<(), String> {
         if !asset_ids.insert(id) {
             return Err("Duplicate asset id".into());
         }
-        let path = asset["path"].as_str().ok_or("Invalid asset path")?;
-        validate_relative(path)?;
-        if !["image/png", "image/jpeg", "image/webp"]
-            .contains(&asset["mime"].as_str().unwrap_or(""))
-        {
-            return Err("Unsupported image format".into());
+        if asset["source"] == "builtin" {
+            if ![
+                "kraft-light",
+                "kraft-dark",
+                "recycled",
+                "cardstock",
+                "weathered",
+                "creases",
+                "grease",
+                "dirt",
+                "folds",
+                "dents",
+                "wear",
+                "tape",
+                "parcel",
+            ]
+            .contains(&asset["builtin"].as_str().unwrap_or(""))
+                || asset["mime"] != "image/svg+xml"
+            {
+                return Err("Invalid built-in placeholder".into());
+            }
+        } else {
+            let path = asset["path"].as_str().ok_or("Invalid asset path")?;
+            validate_relative(path)?;
+            if !["image/png", "image/jpeg", "image/webp"]
+                .contains(&asset["mime"].as_str().unwrap_or(""))
+            {
+                return Err("Unsupported image format".into());
+            }
         }
     }
     for el in elements {
@@ -91,6 +114,24 @@ pub fn validate(project: &Value) -> Result<(), String> {
         }
         number(el, "rotation", -36000.0, 36000.0)?;
         number(el, "opacity", 0.0, 1.0)?;
+        for key in ["scaleX", "scaleY"] {
+            if !el[key].is_null() {
+                number(el, key, 0.01, 100.0)?;
+            }
+        }
+        for key in ["flipX", "flipY", "allowOverflow", "protect"] {
+            if !el[key].is_null() && !el[key].is_boolean() {
+                return Err(format!("Invalid {key}"));
+            }
+        }
+        if let Some(locks) = el["propertyLocks"].as_array() {
+            if locks.iter().any(|v| {
+                !["position", "scale", "rotation", "opacity", "flip", "asset"]
+                    .contains(&v.as_str().unwrap_or(""))
+            }) {
+                return Err("Invalid property lock".into());
+            }
+        }
         color(el, "fill")?;
         for key in ["visible", "locked"] {
             if !el[key].is_boolean() {
@@ -110,10 +151,13 @@ pub fn validate(project: &Value) -> Result<(), String> {
             return Err("Missing image asset reference".into());
         }
     }
+    if project["version"] == 2 {
+        crate::schema_v2::validate(project)?;
+    }
     Ok(())
 }
 
-fn number(value: &Value, key: &str, min: f64, max: f64) -> Result<(), String> {
+pub(crate) fn number(value: &Value, key: &str, min: f64, max: f64) -> Result<(), String> {
     if value[key]
         .as_f64()
         .filter(|n| n.is_finite() && *n >= min && *n <= max)
@@ -124,7 +168,7 @@ fn number(value: &Value, key: &str, min: f64, max: f64) -> Result<(), String> {
     Ok(())
 }
 
-fn valid_id(value: &str) -> bool {
+pub(crate) fn valid_id(value: &str) -> bool {
     !value.is_empty()
         && value.len() <= 128
         && value
@@ -132,7 +176,7 @@ fn valid_id(value: &str) -> bool {
             .all(|c| c.is_ascii_alphanumeric() || c == b'-' || c == b'_')
 }
 
-fn color(value: &Value, key: &str) -> Result<(), String> {
+pub(crate) fn color(value: &Value, key: &str) -> Result<(), String> {
     let s = value[key].as_str().unwrap_or("");
     if s.len() != 7 || !s.starts_with('#') || !s[1..].bytes().all(|c| c.is_ascii_hexdigit()) {
         return Err(format!("Invalid {key} color"));
