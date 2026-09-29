@@ -1,0 +1,24 @@
+[package]
+name = "parcel-party-studio"
+version = "0.1.0"
+description = "A desktop workshop for cardboard game assets"
+authors = ["Sigilo-dev"]
+edition = "2021"
+
+[lib]
+name = "parcel_party_studio_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rfd = "0.15"
+base64 = "0.22"
+uuid = { version = "1", features = ["v4"] }
+
+[dev-dependencies]
+tempfile = "3"
