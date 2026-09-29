@@ -1,10 +1,10 @@
+use crate::schema::{validate, validate_relative};
 use base64::{engine::general_purpose::STANDARD, Engine};
 use serde::Serialize;
-use serde_json::{json, Value};
+use serde_json::Value;
 use std::{
-    collections::HashSet,
     fs,
-    path::{Component, Path, PathBuf},
+    path::{Path, PathBuf},
     sync::Mutex,
 };
 use tauri::State;
@@ -20,139 +20,8 @@ pub struct LoadedProject {
     asset_data: std::collections::HashMap<String, String>,
 }
 
-fn error(e: impl std::fmt::Display) -> String {
+pub(crate) fn error(e: impl std::fmt::Display) -> String {
     e.to_string()
-}
-
-pub fn validate(project: &Value) -> Result<(), String> {
-    if project["version"].as_u64() != Some(1) {
-        return Err("Unsupported project version".into());
-    }
-    for key in ["id", "name"] {
-        if project[key]
-            .as_str()
-            .filter(|s| !s.is_empty() && s.len() <= 512)
-            .is_none()
-        {
-            return Err(format!("Invalid {key}"));
-        }
-    }
-    let template = &project["template"];
-    let kind = template["kind"].as_str().unwrap_or("");
-    if !["rectangular", "square", "circle", "bold"].contains(&kind) {
-        return Err("Invalid template".into());
-    }
-    for key in ["width", "height"] {
-        number(template, key, 64.0, 4096.0)?;
-    }
-    number(
-        template,
-        "safeInset",
-        0.0,
-        template["width"]
-            .as_f64()
-            .unwrap()
-            .min(template["height"].as_f64().unwrap())
-            / 2.0,
-    )?;
-    number(template, "outlineWidth", 0.0, 32.0)?;
-    color(template, "fill")?;
-    color(template, "outline")?;
-    let assets = project["assets"].as_array().ok_or("Invalid assets")?;
-    let elements = project["elements"].as_array().ok_or("Invalid elements")?;
-    if elements.len() > 5000 || assets.len() > 500 {
-        return Err("Project exceeds element or asset limits".into());
-    }
-    let mut ids = HashSet::new();
-    let mut asset_ids = HashSet::new();
-    for asset in assets {
-        let id = asset["id"]
-            .as_str()
-            .filter(|s| !s.is_empty())
-            .ok_or("Invalid asset id")?;
-        if !asset_ids.insert(id) {
-            return Err("Duplicate asset id".into());
-        }
-        let path = asset["path"].as_str().ok_or("Invalid asset path")?;
-        validate_relative(path)?;
-        if !["image/png", "image/jpeg", "image/webp"]
-            .contains(&asset["mime"].as_str().unwrap_or(""))
-        {
-            return Err("Unsupported image format".into());
-        }
-    }
-    for el in elements {
-        let id = el["id"]
-            .as_str()
-            .filter(|s| !s.is_empty())
-            .ok_or("Invalid element id")?;
-        if !ids.insert(id) {
-            return Err("Duplicate element id".into());
-        }
-        let kind = el["kind"].as_str().unwrap_or("");
-        if !["rectangle", "ellipse", "text", "image"].contains(&kind) {
-            return Err("Invalid element kind".into());
-        }
-        for key in ["x", "y"] {
-            number(el, key, -32768.0, 32768.0)?;
-        }
-        for key in ["width", "height"] {
-            number(el, key, 1.0, 16384.0)?;
-        }
-        number(el, "rotation", -36000.0, 36000.0)?;
-        number(el, "opacity", 0.0, 1.0)?;
-        color(el, "fill")?;
-        for key in ["visible", "locked"] {
-            if !el[key].is_boolean() {
-                return Err(format!("Invalid {key}"));
-            }
-        }
-        if el["name"].as_str().is_none() {
-            return Err("Invalid element name".into());
-        }
-        if kind == "text" {
-            number(el, "fontSize", 1.0, 1024.0)?;
-            if el["text"].as_str().filter(|s| s.len() <= 10000).is_none() {
-                return Err("Invalid text".into());
-            }
-        }
-        if kind == "image" && !asset_ids.contains(el["assetId"].as_str().unwrap_or("")) {
-            return Err("Missing image asset reference".into());
-        }
-    }
-    Ok(())
-}
-
-fn number(value: &Value, key: &str, min: f64, max: f64) -> Result<(), String> {
-    if value[key]
-        .as_f64()
-        .filter(|n| n.is_finite() && *n >= min && *n <= max)
-        .is_none()
-    {
-        return Err(format!("Invalid {key}: expected {min} to {max}"));
-    }
-    Ok(())
-}
-
-fn color(value: &Value, key: &str) -> Result<(), String> {
-    let s = value[key].as_str().unwrap_or("");
-    if s.len() != 7 || !s.starts_with('#') || !s[1..].bytes().all(|c| c.is_ascii_hexdigit()) {
-        return Err(format!("Invalid {key} color"));
-    }
-    Ok(())
-}
-
-pub fn validate_relative(path: &str) -> Result<(), String> {
-    let parts: Vec<_> = Path::new(path).components().collect();
-    if path.contains('\\')
-        || path.contains(':')
-        || parts.len() != 2
-        || parts[0] != Component::Normal("assets".as_ref())
-        || !matches!(parts[1], Component::Normal(_))
-    {
-        return Err("Asset paths must be relative files inside assets/".into());
-    }
-    Ok(())
 }
 
 fn asset_path(root: &Path, relative: &str) -> Result<PathBuf, String> {
@@ -167,6 +36,11 @@ fn asset_path(root: &Path, relative: &str) -> Result<PathBuf, String> {
 
 pub fn save_to(root: &Path, project: &Value) -> Result<(), String> {
     validate(project)?;
+    for file in ["project.json", "project.json.bak"] {
+        if fs::symlink_metadata(root.join(file)).is_ok_and(|m| m.file_type().is_symlink()) {
+            return Err("Project and backup files cannot be symbolic links".into());
+        }
+    }
     for asset in project["assets"].as_array().unwrap() {
         asset_path(root, asset["path"].as_str().unwrap())?;
     }
@@ -228,7 +102,7 @@ fn load_from(root: &Path) -> Result<LoadedProject, String> {
     })
 }
 
-fn root(state: &State<'_, Workspace>) -> Result<PathBuf, String> {
+pub(crate) fn root(state: &State<'_, Workspace>) -> Result<PathBuf, String> {
     state
         .0
         .lock()
@@ -290,73 +164,10 @@ pub async fn save_project(project: Value, state: State<'_, Workspace>) -> Result
     save_to(&root(&state)?, &project)
 }
 
-#[tauri::command]
-pub async fn import_asset(state: State<'_, Workspace>) -> Result<Option<Value>, String> {
-    let root = root(&state)?;
-    let Some(file) = rfd::AsyncFileDialog::new()
-        .set_title("Import a local image")
-        .add_filter("Images", &["png", "jpg", "jpeg", "webp"])
-        .pick_file()
-        .await
-    else {
-        return Ok(None);
-    };
-    let ext = file
-        .path()
-        .extension()
-        .and_then(|s| s.to_str())
-        .unwrap_or("")
-        .to_lowercase();
-    let mime = match ext.as_str() {
-        "png" => "image/png",
-        "jpg" | "jpeg" => "image/jpeg",
-        "webp" => "image/webp",
-        _ => return Err("Unsupported image format".into()),
-    };
-    if fs::metadata(file.path()).map_err(error)?.len() > 20 * 1024 * 1024 {
-        return Err("Images must be smaller than 20 MB".into());
-    }
-    let bytes = fs::read(file.path()).map_err(error)?;
-    let id = uuid::Uuid::new_v4().to_string();
-    let relative = format!("assets/{id}.{ext}");
-    let assets = root.join("assets").canonicalize().map_err(error)?;
-    if !assets.starts_with(root.canonicalize().map_err(error)?) {
-        return Err("Assets directory escapes project".into());
-    }
-    fs::write(root.join(&relative), &bytes).map_err(error)?;
-    Ok(Some(
-        json!({ "asset": { "id": id, "name": file.file_name(), "path": relative, "mime": mime }, "data": format!("data:{mime};base64,{}", STANDARD.encode(bytes)) }),
-    ))
-}
-
-#[tauri::command]
-pub async fn export_png(data: String) -> Result<Option<String>, String> {
-    let encoded = data
-        .strip_prefix("data:image/png;base64,")
-        .ok_or("Expected PNG data")?;
-    if encoded.len() > 100 * 1024 * 1024 {
-        return Err("Export exceeds 100 MB".into());
-    }
-    let bytes = STANDARD.decode(encoded).map_err(error)?;
-    if !bytes.starts_with(b"\x89PNG\r\n\x1a\n") {
-        return Err("Invalid PNG signature".into());
-    }
-    let Some(file) = rfd::AsyncFileDialog::new()
-        .set_title("Export for Godot")
-        .set_file_name("parcel.png")
-        .add_filter("PNG image", &["png"])
-        .save_file()
-        .await
-    else {
-        return Ok(None);
-    };
-    fs::write(file.path(), bytes).map_err(error)?;
-    Ok(Some(file.path().to_string_lossy().into_owned()))
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde_json::json;
     fn fixture() -> Value {
         json!({ "version": 1, "id": "stable-id", "name": "Test", "template": { "kind": "circle", "width": 600, "height": 600, "safeInset": 24, "outlineWidth": 3, "fill": "#c99b62", "outline": "#805a38" }, "elements": [], "assets": [] })
     }
@@ -411,5 +222,31 @@ mod tests {
         let loaded = load_from(dir.path()).unwrap();
         assert_eq!(loaded.project["assets"][0]["path"], "assets/image.png");
         assert!(loaded.asset_data["img"].starts_with("data:image/png;base64,"));
+    }
+    #[test]
+    fn preserves_layer_order_transforms_and_flags() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut p = fixture();
+        let first = json!({ "id": "layer-a", "kind": "rectangle", "name": "Tape", "x": -30, "y": 22, "width": 88, "height": 126, "rotation": 33, "opacity": 0.4, "visible": false, "locked": true, "fill": "#eac080" });
+        let mut second = first.clone();
+        second["id"] = json!("layer-b");
+        second["visible"] = json!(true);
+        p["elements"] = json!([first, second]);
+        save_to(dir.path(), &p).unwrap();
+        assert_eq!(load_from(dir.path()).unwrap().project, p);
+        p["elements"][1]["id"] = json!("layer-a");
+        assert!(save_to(dir.path(), &p).is_err());
+    }
+    #[test]
+    fn rejects_bad_ratios_missing_assets_and_corrupt_json() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut p = fixture();
+        p["template"]["width"] = json!(300);
+        assert!(save_to(dir.path(), &p).is_err());
+        p = fixture();
+        p["assets"] = json!([{ "id": "missing", "name": "Missing", "path": "assets/missing.png", "mime": "image/png" }]);
+        assert!(save_to(dir.path(), &p).is_err());
+        fs::write(dir.path().join("project.json"), "{broken").unwrap();
+        assert!(load_from(dir.path()).is_err());
     }
 }

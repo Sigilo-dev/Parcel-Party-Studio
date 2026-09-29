@@ -1,4 +1,7 @@
+mod assets;
+mod export;
 mod persistence;
+mod schema;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -8,8 +11,8 @@ pub fn run() {
             persistence::create_project,
             persistence::open_project,
             persistence::save_project,
-            persistence::import_asset,
-            persistence::export_png
+            assets::import_asset,
+            export::export_png
         ])
         .run(tauri::generate_context!())
         .expect("could not run Parcel Party Studio");
